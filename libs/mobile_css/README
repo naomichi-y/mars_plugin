@@ -1,0 +1,40 @@
+####################################################################
+# インストール
+####################################################################
+
+# 依存モジュールの組み込み
+./configure --enable-dom
+
+# 依存パッケージのインストール
+pear install HTML_CSS-1.5.4
+
+pear channel-discover openpear.org
+pear install openpear/HTML_CSS_Selector2XPath
+
+# PEAR パッケージの不具合修正 (推奨)
+# (http://pear.php.net/bugs/bug.php?id=16544)
+
+vi {PEAR_DIR}/HTML/CSS.php
+
+====================================================================
+$key = trim($keystr);
++) if (!array_key_exists($key, $atRulesMap)) continue; // FIX
+$parentAtRule = isset($atRulesMap[$key][$i])
+  ? $atRulesMap[$key][$i] : $atRulesMap[$key][0];
+====================================================================
+
+####################################################################
+# 使い方
+####################################################################
+
+config/global_setup.yml にリスナー、プラグインの参照設定を追加して下さい。
+
+====================================================================
+  controller:
+    listener: MobileCSSListener
+
+  autoload:
+    - /var/lib/mars_plugin/mobile_css
+====================================================================
+
+以上の設定で DoCoMo (UA) からアクセスした場合はインライン CSS が適用されるようになります。
